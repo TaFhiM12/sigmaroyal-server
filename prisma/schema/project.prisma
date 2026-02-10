@@ -1,0 +1,44 @@
+model Project {
+  id          String   @id @default(uuid())
+  code        String?  @unique
+  name        String
+  slug        String   @unique
+  summary     String?
+  description String?
+
+  portfolioCategory ProjectPortfolioCategory
+  lifecycleStatus   ProjectLifecycleStatus @default(ONGOING)
+
+  businessSector BusinessSector
+  footprint      FootprintType?
+
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  contractRole      ContractRole
+  mainContractorId  String?
+  mainContractor    Client? @relation("MainContractorProjects", fields: [mainContractorId], references: [id], onDelete: SetNull)
+
+  startDate      DateTime?
+  endDate        DateTime?
+  startPrecision DatePrecision @default(UNKNOWN)
+  endPrecision   DatePrecision @default(UNKNOWN)
+  durationText   String?
+  durationDays   Int?
+
+  locations ProjectLocation[]
+  specs     ProjectSpec[]
+  tags      ProjectTag[]
+  assets    ProjectAsset[]
+
+  keywords   String[] @default([])
+  isFeatured Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([portfolioCategory, lifecycleStatus])
+  @@index([businessSector, contractRole])
+  @@index([clientId])
+  @@index([mainContractorId])
+}

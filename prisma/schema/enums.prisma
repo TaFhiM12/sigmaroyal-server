@@ -1,0 +1,71 @@
+enum ProjectLifecycleStatus {
+  PLANNED
+  ONGOING
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+}
+
+enum ProjectPortfolioCategory {
+  CURRENT_DEVELOPMENT
+  COMPLETED_PROJECT
+  EMERGENCY_RESPONSE
+  TRACK_RECORD
+}
+
+enum BusinessSector {
+  OIL_GAS
+  POWER
+  PROCESS_PLANT
+  ENGINEERING_SERVICES
+  LPG_SNG
+  OTHER
+}
+
+enum ContractRole {
+  CONTRACTOR
+  SUBCONTRACTOR
+  EPC_CONTRACTOR
+  JV_PARTNER
+  CONSULTANT
+  SUPPLIER
+  OTHER
+}
+
+enum FootprintType {
+  CONSTRUCTION_WORKS
+  WQT_WORKS
+  CONTRACT_SIGNING
+  MAINTENANCE_WORKS
+  OTHER
+}
+
+enum DatePrecision {
+  EXACT
+  MONTH
+  YEAR
+  UNKNOWN
+}
+
+enum UnitSystem {
+  METRIC
+  IMPERIAL
+  MIXED
+}
+
+enum ClientType {
+  GOVERNMENT
+  STATE_OWNED
+  PRIVATE
+  JV_PARTNER
+  INTERNATIONAL
+  UNKNOWN
+}
+
+enum AssetType {
+  IMAGE
+  PDF
+  DOC
+  VIDEO
+  LINK
+}
