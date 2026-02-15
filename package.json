@@ -5,9 +5,8 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "npx tsx watch src/server.ts",
-    "build": "prisma generate && tsup",
-    "start": "node api/server.mjs",
-    "postinstall": "prisma generate",
+    "build": "prisma generate",
+    "start": "node --env-file=.env node_modules/.bin/tsx src/server.ts",
     "prisma:migrate": "prisma migrate deploy"
   },
   "keywords": [],
