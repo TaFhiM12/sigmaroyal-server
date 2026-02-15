@@ -10,7 +10,7 @@ app.use(express.json());
 app.use('/api/v1/projects', projectRoutes);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, TypeScript + Express!');
+  res.send('Sigma Royal API is running');
 });
 
 export default app;
