@@ -112,7 +112,7 @@ const deleteClient = async (req: Request, res: Response) => {
 const reorderClients = async (req: Request, res: Response) => {
   const { ids } = req.body;
 
-  if (!ids || !Array.isArray(ids)) {
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
     return res.status(400).json({
       success: false,
       message: "Invalid request: ids array required",
@@ -123,6 +123,7 @@ const reorderClients = async (req: Request, res: Response) => {
     const result = await clientService.reorderClients(ids);
     res.status(200).json(result);
   } catch (error: unknown) {
+    console.error('Reorder error:', error);
     res.status(500).json({
       success: false,
       message: error instanceof Error ? error.message : "Failed to reorder clients",

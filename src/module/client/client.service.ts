@@ -111,24 +111,31 @@ const deleteClient = async (id: string) => {
 };
 
 const reorderClients = async (ids: string[]) => {
-  // Verify all clients exist before reordering
-  const clients = await prisma.client.findMany({
-    where: { id: { in: ids } },
-  });
-
-  if (clients.length !== ids.length) {
-    throw new Error("Some clients not found");
+  try {
+    // Use a transaction to update all orders
+    await prisma.$transaction(
+      ids.map((id, index) =>
+        prisma.client.update({
+          where: { id },
+          data: { order: index + 1 },
+        })
+      )
+    );
+    
+    // Fetch and return the updated clients
+    const updatedClients = await prisma.client.findMany({
+      orderBy: { order: 'asc' },
+    });
+    
+    return { 
+      success: true, 
+      message: "Order updated successfully",
+      data: updatedClients 
+    };
+  } catch (error) {
+    console.error('Reorder error:', error);
+    throw new Error("Failed to reorder clients");
   }
-
-  const updates = ids.map((id, index) =>
-    prisma.client.update({
-      where: { id },
-      data: { order: index + 1 },
-    })
-  );
-
-  await prisma.$transaction(updates);
-  return { success: true, message: "Order updated successfully" };
 };
 
 export const clientService = {
