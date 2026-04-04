@@ -2,6 +2,7 @@
 import { Prisma, Project, ProjectStatus, Sector } from "../../../generated/prisma";
 import { prisma } from "../../lib/prisma";
 
+// backend project.service.ts - Updated createProject
 type CreateProjectPayload = Omit<Project, "id" | "createdAt" | "updatedAt"> & {
   images?: Array<{ url: string; caption?: string }>;
 };
@@ -39,11 +40,13 @@ const createProject = async (payload: CreateProjectPayload) => {
       description,
       status,
       featured,
-      ...(images && {
+      ...(images && images.length > 0 && {
         images: {
-          create: images.map((img) => ({
+          create: images.map((img, index) => ({
             url: img.url,
-            ...(img.caption !== undefined && { caption: img.caption }),
+            caption: img.caption || `Project image ${index + 1}`,
+            isMain: index === 0, // First image becomes main
+            order: index,
           })),
         },
       }),
@@ -54,6 +57,86 @@ const createProject = async (payload: CreateProjectPayload) => {
   });
 
   return result;
+};
+
+// Add updateProject function
+// backend project.service.ts - Simplified updateProject without isMain/order
+const updateProject = async (id: string, payload: any) => {
+  const {
+    title,
+    slug,
+    sector,
+    client,
+    companyRole,
+    location,
+    capacity,
+    duration,
+    year,
+    scopeOfWork,
+    description,
+    status,
+    featured,
+    images,
+    existingImageIds,
+    deleteImageIds,
+  } = payload;
+
+  // Update project basic info
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (slug !== undefined) updateData.slug = slug;
+  if (sector !== undefined) updateData.sector = sector;
+  if (client !== undefined) updateData.client = client;
+  if (companyRole !== undefined) updateData.companyRole = companyRole;
+  if (location !== undefined) updateData.location = location;
+  if (capacity !== undefined) updateData.capacity = capacity;
+  if (duration !== undefined) updateData.duration = duration;
+  if (year !== undefined) updateData.year = year;
+  if (scopeOfWork !== undefined) updateData.scopeOfWork = scopeOfWork;
+  if (description !== undefined) updateData.description = description;
+  if (status !== undefined) updateData.status = status;
+  if (featured !== undefined) updateData.featured = featured;
+
+  await prisma.project.update({
+    where: { id },
+    data: updateData,
+  });
+
+  // Delete specific images by IDs
+  if (deleteImageIds && deleteImageIds.length > 0) {
+    await prisma.projectImage.deleteMany({
+      where: {
+        id: { in: deleteImageIds },
+      },
+    });
+  }
+
+  // Delete images not in keep list (if keep list provided)
+  if (existingImageIds) {
+    await prisma.projectImage.deleteMany({
+      where: {
+        projectId: id,
+        id: { notIn: existingImageIds },
+      },
+    });
+  }
+
+  // Add new images
+  if (images && images.length > 0) {
+    await prisma.projectImage.createMany({
+      data: images.map((img: any) => ({
+        url: img.url,
+        caption: img.caption,
+        projectId: id,
+      })),
+    });
+  }
+
+  // Return updated project with images
+  return prisma.project.findUnique({
+    where: { id },
+    include: { images: true },
+  });
 };
 
 
@@ -196,10 +279,37 @@ const getProjectBySlug = async (slug: string) => {
 
   return project;
 };
+const getProjectById = async (id: string) => {
+  const project = await prisma.project.findUnique({
+    where: { id },
+    include: { images: true },
+  });
 
+  if (!project) {
+    throw new Error("Project not found");
+  }
 
+  return project;
+};
+
+const deleteProject = async (id: string) => {
+  try {
+    await prisma.project.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error(`Error deleting project with id ${id}:`, error);
+    throw new Error((error instanceof Error ? error.message : String(error)) || "Failed to delete project");
+  }
+}
+
+// Update the service export
 export const projectService = {
   createProject,
+  updateProject,
   getProjects,
+  getProjectById,
   getProjectBySlug,
+  deleteProject,
 };
+

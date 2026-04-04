@@ -1,3 +1,4 @@
+// backend project.controller.ts
 import { Request, Response } from "express";
 import { projectService } from "./project.service";
 
@@ -12,7 +13,6 @@ const createProject = async (req: Request, res: Response) => {
     });
   } catch (error: unknown) {
     console.error(error);
-
     res.status(500).json({
       success: false,
       message: (error instanceof Error ? error.message : String(error)) || "Failed to create project",
@@ -31,16 +31,32 @@ const getProjects = async (req: Request, res: Response) => {
     });
   } catch (error: unknown) {
     console.error("Error fetching projects:", error);
-
     res.status(500).json({
       success: false,
-      message:
-        (error instanceof Error ? error.message : String(error)) ||
-        "Failed to fetch projects",
+      message: (error instanceof Error ? error.message : String(error)) || "Failed to fetch projects",
     });
   }
 };
 
+const getProjectById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const project = await projectService.getProjectById(id as string);
+
+    res.status(200).json({
+      success: true,
+      message: "Project fetched successfully",
+      data: project,
+    });
+  } catch (error: unknown) {
+    console.error(`Error fetching project with id ${id}:`, error);
+    res.status(500).json({
+      success: false,
+      message: (error instanceof Error ? error.message : String(error)) || "Failed to fetch project",
+    });
+  }
+};
 
 const getProjectBySlug = async (req: Request, res: Response) => {
   const { slug } = req.params;
@@ -55,7 +71,6 @@ const getProjectBySlug = async (req: Request, res: Response) => {
     });
   } catch (error: unknown) {
     console.error(`Error fetching project with slug ${slug}:`, error);
-
     res.status(500).json({
       success: false,
       message: (error instanceof Error ? error.message : String(error)) || "Failed to fetch project",
@@ -63,8 +78,50 @@ const getProjectBySlug = async (req: Request, res: Response) => {
   }
 };
 
+const updateProject = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await projectService.updateProject(id as string, req.body);
+
+    res.status(200).json({
+      success: true,
+      message: "Project updated successfully",
+      data: result,
+    });
+  } catch (error: unknown) {
+    console.error(`Error updating project with id ${id}:`, error);
+    res.status(500).json({
+      success: false,
+      message: (error instanceof Error ? error.message : String(error)) || "Failed to update project",
+    });
+  }
+};
+
+const deleteProject = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await projectService.deleteProject(id as string);
+
+    res.status(200).json({
+      success: true,
+      message: "Project deleted successfully",
+    });
+  } catch (error: unknown) {
+    console.error(`Error deleting project with id ${id}:`, error);
+    res.status(500).json({
+      success: false,
+      message: (error instanceof Error ? error.message : String(error)) || "Failed to delete project",
+    });
+  }
+};
+
 export const projectController = {
   createProject,
   getProjects,
-    getProjectBySlug,
+  getProjectById,
+  getProjectBySlug,
+  updateProject,
+  deleteProject,
 };
