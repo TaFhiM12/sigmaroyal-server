@@ -1,4 +1,5 @@
 // backend/src/modules/client/client.service.ts
+import { Prisma } from "../../../generated/prisma";
 import { prisma } from "../../lib/prisma";
 
 interface CreateClientPayload {
@@ -37,19 +38,6 @@ const createClient = async (payload: CreateClientPayload) => {
   return result;
 };
 
-const reorderClients = async (ids: string[]) => {
-  const updates = ids.map((id, index) =>
-    prisma.client.update({
-      where: { id },
-      data: { order: index + 1 },
-    })
-  );
-
-  await prisma.$transaction(updates);
-  return { success: true, message: "Order updated successfully" };
-};
-
-
 const getAllClients = async () => {
   const clients = await prisma.client.findMany({
     orderBy: { order: 'asc' },
@@ -71,6 +59,15 @@ const getClientById = async (id: string) => {
 };
 
 const updateClient = async (id: string, payload: UpdateClientPayload) => {
+  // First check if client exists
+  const existingClient = await prisma.client.findUnique({
+    where: { id },
+  });
+
+  if (!existingClient) {
+    throw new Error("Client not found");
+  }
+
   const { name, logoUrl, website, order, isActive } = payload;
 
   const updateData: any = {};
@@ -89,11 +86,49 @@ const updateClient = async (id: string, payload: UpdateClientPayload) => {
 };
 
 const deleteClient = async (id: string) => {
-  await prisma.client.delete({
+  // First check if client exists
+  const existingClient = await prisma.client.findUnique({
     where: { id },
   });
 
-  return { message: "Client deleted successfully" };
+  if (!existingClient) {
+    throw new Error("Client not found");
+  }
+
+  try {
+    await prisma.client.delete({
+      where: { id },
+    });
+    return { message: "Client deleted successfully" };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2003') {
+        throw new Error("Cannot delete client because it is referenced by other records");
+      }
+    }
+    throw error;
+  }
+};
+
+const reorderClients = async (ids: string[]) => {
+  // Verify all clients exist before reordering
+  const clients = await prisma.client.findMany({
+    where: { id: { in: ids } },
+  });
+
+  if (clients.length !== ids.length) {
+    throw new Error("Some clients not found");
+  }
+
+  const updates = ids.map((id, index) =>
+    prisma.client.update({
+      where: { id },
+      data: { order: index + 1 },
+    })
+  );
+
+  await prisma.$transaction(updates);
+  return { success: true, message: "Order updated successfully" };
 };
 
 export const clientService = {

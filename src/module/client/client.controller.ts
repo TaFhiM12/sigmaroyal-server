@@ -42,7 +42,7 @@ const getClientById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const client = await clientService.getClientById(id);
+    const client = await clientService.getClientById(id as string);
     res.status(200).json({
       success: true,
       message: "Client fetched successfully",
@@ -66,7 +66,7 @@ const updateClient = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const result = await clientService.updateClient(id, req.body);
+    const result = await clientService.updateClient(id as string, req.body);
     res.status(200).json({
       success: true,
       message: "Client updated successfully",
@@ -81,7 +81,7 @@ const updateClient = async (req: Request, res: Response) => {
     }
     res.status(500).json({
       success: false,
-      message: "Failed to update client",
+      message: error instanceof Error ? error.message : "Failed to update client",
     });
   }
 };
@@ -90,7 +90,7 @@ const deleteClient = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const result = await clientService.deleteClient(id);
+    const result = await clientService.deleteClient(id as string);
     res.status(200).json({
       success: true,
       message: result.message,
@@ -125,7 +125,7 @@ const reorderClients = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     res.status(500).json({
       success: false,
-      message: "Failed to reorder clients",
+      message: error instanceof Error ? error.message : "Failed to reorder clients",
     });
   }
 };
