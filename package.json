@@ -31,7 +31,9 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "next-cloudinary": "^6.17.5",
     "nodemailer": "^7.0.12",
-    "pg": "^8.17.1"
+    "pg": "^8.17.1",
+    "react-dropzone": "^15.0.0"
   }
 }

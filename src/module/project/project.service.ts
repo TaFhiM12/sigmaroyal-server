@@ -90,33 +90,24 @@ const getProjects = async (query: ProjectQuery) => {
   const limitNumber = Number(limit);
   const skip = (pageNumber - 1) * limitNumber;
 
-  /* --------------------------------------------
-     WHERE FILTER BUILDING
-  --------------------------------------------- */
-
   const where: Prisma.ProjectWhereInput = {};
 
-  // Enum-safe sector filter
   if (sector && Object.values(Sector).includes(sector as Sector)) {
     where.sector = sector as Sector;
   }
 
-  // Enum-safe status filter
   if (status && Object.values(ProjectStatus).includes(status as ProjectStatus)) {
     where.status = status as ProjectStatus;
   }
 
-  // Featured filter
   if (featured !== undefined) {
     where.featured = featured === "true";
   }
 
-  // Year filter
   if (year) {
     where.year = Number(year);
   }
 
-  // Client search filter
   if (client) {
     where.client = {
       contains: client,
@@ -124,7 +115,6 @@ const getProjects = async (query: ProjectQuery) => {
     };
   }
 
-  // Global search
   if (search) {
     where.OR = [
       { title: { contains: search, mode: "insensitive" } },
@@ -132,10 +122,6 @@ const getProjects = async (query: ProjectQuery) => {
       { location: { contains: search, mode: "insensitive" } },
     ];
   }
-
-  /* --------------------------------------------
-     SORTING SAFE HANDLING
-  --------------------------------------------- */
 
   const validSortFields = [
     "createdAt",
@@ -151,10 +137,6 @@ const getProjects = async (query: ProjectQuery) => {
         }
       : { createdAt: "desc" };
 
-  /* --------------------------------------------
-     FETCH PROJECTS + COUNTS
-  --------------------------------------------- */
-
   const [projects, total] = await Promise.all([
     prisma.project.findMany({
       where,
@@ -166,10 +148,6 @@ const getProjects = async (query: ProjectQuery) => {
 
     prisma.project.count({ where }),
   ]);
-
-  /* --------------------------------------------
-     EXTRA COUNTS (Dashboard Ready)
-  --------------------------------------------- */
 
   const [completedCount, ongoingCount, sectorCounts] =
     await Promise.all([
