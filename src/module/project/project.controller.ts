@@ -50,27 +50,14 @@ const getProjectById = async (req: Request, res: Response) => {
       data: project,
     });
   } catch (error: unknown) {
+    if (error instanceof Error && error.message === "Project not found") {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
     console.error(`Error fetching project with id ${id}:`, error);
-    res.status(500).json({
-      success: false,
-      message: (error instanceof Error ? error.message : String(error)) || "Failed to fetch project",
-    });
-  }
-};
-
-const getProjectBySlug = async (req: Request, res: Response) => {
-  const { slug } = req.params;
-
-  try {
-    const project = await projectService.getProjectBySlug(slug as string);
-
-    res.status(200).json({
-      success: true,
-      message: "Project fetched successfully",
-      data: project,
-    });
-  } catch (error: unknown) {
-    console.error(`Error fetching project with slug ${slug}:`, error);
     res.status(500).json({
       success: false,
       message: (error instanceof Error ? error.message : String(error)) || "Failed to fetch project",
@@ -121,7 +108,6 @@ export const projectController = {
   createProject,
   getProjects,
   getProjectById,
-  getProjectBySlug,
   updateProject,
   deleteProject,
 };

@@ -1,8 +1,7 @@
-
+// backend project.service.ts - Fixed version without isMain/order
 import { Prisma, Project, ProjectStatus, Sector } from "../../../generated/prisma";
 import { prisma } from "../../lib/prisma";
 
-// backend project.service.ts - Updated createProject
 type CreateProjectPayload = Omit<Project, "id" | "createdAt" | "updatedAt"> & {
   images?: Array<{ url: string; caption?: string }>;
 };
@@ -42,11 +41,9 @@ const createProject = async (payload: CreateProjectPayload) => {
       featured,
       ...(images && images.length > 0 && {
         images: {
-          create: images.map((img, index) => ({
+          create: images.map((img) => ({
             url: img.url,
-            caption: img.caption || `Project image ${index + 1}`,
-            isMain: index === 0, // First image becomes main
-            order: index,
+            caption: img.caption || null,
           })),
         },
       }),
@@ -59,8 +56,6 @@ const createProject = async (payload: CreateProjectPayload) => {
   return result;
 };
 
-// Add updateProject function
-// backend project.service.ts - Simplified updateProject without isMain/order
 const updateProject = async (id: string, payload: any) => {
   const {
     title,
@@ -126,7 +121,7 @@ const updateProject = async (id: string, payload: any) => {
     await prisma.projectImage.createMany({
       data: images.map((img: any) => ({
         url: img.url,
-        caption: img.caption,
+        caption: img.caption || null,
         projectId: id,
       })),
     });
@@ -138,8 +133,6 @@ const updateProject = async (id: string, payload: any) => {
     include: { images: true },
   });
 };
-
-
 
 interface ProjectQuery {
   page?: string;
@@ -153,7 +146,6 @@ interface ProjectQuery {
   sortBy?: string;
   sortOrder?: string;
 }
-
 
 const getProjects = async (query: ProjectQuery) => {
   const {
@@ -266,19 +258,6 @@ const getProjects = async (query: ProjectQuery) => {
   };
 };
 
-
-const getProjectBySlug = async (slug: string) => {
-  const project = await prisma.project.findUnique({
-    where: { slug },
-    include: { images: true },
-  });
-
-  if (!project) {
-    throw new Error("Project not found");
-  }
-
-  return project;
-};
 const getProjectById = async (id: string) => {
   const project = await prisma.project.findUnique({
     where: { id },
@@ -309,7 +288,5 @@ export const projectService = {
   updateProject,
   getProjects,
   getProjectById,
-  getProjectBySlug,
   deleteProject,
 };
-
