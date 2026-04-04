@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.get('/', projectController.getProjects);
 router.get('/:slug', projectController.getProjectBySlug);
-router.post('/create', projectController.createProject);
+router.post('/', projectController.createProject);
 
 export const projectRoutes = router;
