@@ -6,6 +6,17 @@ const getApp = async () => {
 };
 
 export default async function handler(req: any, res: any) {
+  const url = req.url || "/";
+
+  if (url === "/" || url.startsWith("/api/v1/health")) {
+    return res.status(200).json({
+      success: true,
+      message: "Sigma Royal API is running on Vercel",
+      runtime: "serverless",
+      timestamp: new Date().toISOString(),
+    });
+  }
+
   try {
     const app = await getApp();
     return app(req, res);
