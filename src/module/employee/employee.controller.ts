@@ -1,6 +1,5 @@
 import { Request, Response } from "express"
 import { EmployeeService } from "./employee.service";
-import { success } from "better-auth";
 
 const createEmployee = async(req: Request, res: Response) => {
     // Implementation for creating an employee

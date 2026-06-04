@@ -1,14 +1,15 @@
 import { Router } from "express";
 import { EmployeeController } from "./employee.controller";
+import { requireAdminAuth } from "../../middleware/requireAdminAuth";
 
 const router = Router();
 
 
 
-router.post("/", EmployeeController.createEmployee);
+router.post("/", requireAdminAuth, EmployeeController.createEmployee);
 router.get("/:id", EmployeeController.getEmployeeById);
 router.get("/", EmployeeController.getAllEmployees);
-router.put("/:id", EmployeeController.updateEmployee);
-router.delete("/:id", EmployeeController.deleteEmployee);
+router.put("/:id", requireAdminAuth, EmployeeController.updateEmployee);
+router.delete("/:id", requireAdminAuth, EmployeeController.deleteEmployee);
 
 export const employeeRoutes = router;

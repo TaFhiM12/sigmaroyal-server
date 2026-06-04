@@ -7,9 +7,9 @@ const router = Router();
 
 router.post("/", requireAdminAuth, clientController.createClient);
 router.get("/", clientController.getAllClients);
+router.post("/reorder", requireAdminAuth, clientController.reorderClients);
 router.get("/:id", clientController.getClientById);
 router.put("/:id", requireAdminAuth, clientController.updateClient);
 router.delete("/:id", requireAdminAuth, clientController.deleteClient);
-router.post("/reorder", requireAdminAuth, clientController.reorderClients);
 
 export const clientRouter = router;
