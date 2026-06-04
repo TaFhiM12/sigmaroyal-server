@@ -1,4 +1,4 @@
-let appPromise: Promise<typeof import("../src/app")["default"]> | null = null;
+let appPromise: Promise<any> | null = null;
 
 const getApp = async () => {
   appPromise ??= import("../src/app").then((module) => module.default);
