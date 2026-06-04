@@ -1,6 +1,6 @@
 // backend project.service.ts - Fixed version without isMain/order
-import { Prisma, Project, ProjectStatus, Sector } from "../../../generated/prisma";
-import { prisma } from "../../lib/prisma";
+import { Prisma, Project, ProjectStatus, Sector } from "../../../generated/prisma/index.js";
+import { prisma } from "../../lib/prisma.js";
 
 type CreateProjectPayload = Omit<Project, "id" | "createdAt" | "updatedAt"> & {
   images?: Array<{ url: string; caption?: string }>;

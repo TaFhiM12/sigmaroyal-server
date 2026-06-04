@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { qhsePolicyService } from "./qhse-policy.service";
+import { qhsePolicyService } from "./qhse-policy.service.js";
 
 const getPolicy = async (_req: Request, res: Response) => {
   try {

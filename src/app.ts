@@ -1,13 +1,13 @@
 import express, { Application, Request, Response} from 'express';
-import { projectRoutes } from './module/project/project.route';
+import { projectRoutes } from './module/project/project.route.js';
 import cors from 'cors';
-import { employeeRoutes } from './module/employee/employee.route';
-import { certificationRouter } from './module/certification/certification.router';
-import { clientRouter } from './module/client/client.router';
-import { authRoutes } from './module/auth/auth.route';
-import { hytorcRoutes } from './module/hytorc/hytorc.route';
-import { qhsePolicyRoutes } from './module/qhse-policy/qhse-policy.route';
-import { contactRoutes } from './module/contact/contact.route';
+import { employeeRoutes } from './module/employee/employee.route.js';
+import { certificationRouter } from './module/certification/certification.router.js';
+import { clientRouter } from './module/client/client.router.js';
+import { authRoutes } from './module/auth/auth.route.js';
+import { hytorcRoutes } from './module/hytorc/hytorc.route.js';
+import { qhsePolicyRoutes } from './module/qhse-policy/qhse-policy.route.js';
+import { contactRoutes } from './module/contact/contact.route.js';
 
 const app: Application = express();
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { hytorcService } from "./hytorc.service";
+import { hytorcService } from "./hytorc.service.js";
 
 const getCategories = async (req: Request, res: Response) => {
   try {

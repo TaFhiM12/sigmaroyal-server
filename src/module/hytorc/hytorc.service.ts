@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 
 const getCategories = async (onlyActive = true) => {
   return prisma.hytorcCategory.findMany({

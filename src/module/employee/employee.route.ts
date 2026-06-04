@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { EmployeeController } from "./employee.controller";
-import { requireAdminAuth } from "../../middleware/requireAdminAuth";
+import { EmployeeController } from "./employee.controller.js";
+import { requireAdminAuth } from "../../middleware/requireAdminAuth.js";
 
 const router = Router();
 

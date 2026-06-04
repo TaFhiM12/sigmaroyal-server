@@ -1,7 +1,7 @@
 let appPromise: Promise<any> | null = null;
 
 const getApp = async () => {
-  appPromise ??= import("../src/app").then((module) => module.default);
+  appPromise ??= import("../src/app.js").then((module) => module.default);
   return appPromise;
 };
 

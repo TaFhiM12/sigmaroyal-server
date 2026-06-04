@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { hytorcController } from "./hytorc.controller";
-import { requireAdminAuth } from "../../middleware/requireAdminAuth";
+import { hytorcController } from "./hytorc.controller.js";
+import { requireAdminAuth } from "../../middleware/requireAdminAuth.js";
 
 const router = Router();
 

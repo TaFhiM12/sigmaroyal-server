@@ -2,8 +2,8 @@
 // This file should only contain backend logic, not React/Next code.
 // Example: Service functions for QHSE policy
 
-import { QhsePolicy } from "../../../generated/prisma";
-import { prisma } from "../../lib/prisma";
+import { QhsePolicy } from "../../../generated/prisma/index.js";
+import { prisma } from "../../lib/prisma.js";
 
 export const qhsePolicyService = {
   async getPolicy() {

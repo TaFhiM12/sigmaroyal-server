@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { authService } from "../module/auth/auth.service";
+import { authService } from "../module/auth/auth.service.js";
 
 export const requireAdminAuth = (
   req: Request,

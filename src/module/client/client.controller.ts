@@ -1,6 +1,6 @@
 // backend/src/modules/client/client.controller.ts
 import { Request, Response } from "express";
-import { clientService } from "./client.service";
+import { clientService } from "./client.service.js";
 
 const createClient = async (req: Request, res: Response) => {
   try {

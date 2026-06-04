@@ -1,6 +1,6 @@
 // backend/src/modules/client/client.service.ts
-import { Prisma } from "../../../generated/prisma";
-import { prisma } from "../../lib/prisma";
+import { Prisma } from "../../../generated/prisma/index.js";
+import { prisma } from "../../lib/prisma.js";
 
 interface CreateClientPayload {
   name: string;

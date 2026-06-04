@@ -1,7 +1,7 @@
 // backend/src/modules/client/client.routes.ts
 import { Router } from "express";
-import { clientController } from "./client.controller";
-import { requireAdminAuth } from "../../middleware/requireAdminAuth";
+import { clientController } from "./client.controller.js";
+import { requireAdminAuth } from "../../middleware/requireAdminAuth.js";
 
 const router = Router();
 

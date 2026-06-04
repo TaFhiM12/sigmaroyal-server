@@ -1,7 +1,7 @@
 // backend/src/modules/certification/certification.routes.ts
 import { Router } from "express";
-import { certificationController } from "./certification.controller";
-import { requireAdminAuth } from "../../middleware/requireAdminAuth";
+import { certificationController } from "./certification.controller.js";
+import { requireAdminAuth } from "../../middleware/requireAdminAuth.js";
 
 const router = Router();
 

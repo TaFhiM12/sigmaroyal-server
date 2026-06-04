@@ -1,5 +1,5 @@
-import { Employee } from "../../../generated/prisma";
-import { prisma } from "../../lib/prisma";
+import { Employee } from "../../../generated/prisma/index.js";
+import { prisma } from "../../lib/prisma.js";
 
 const createEmployee = async (employeeData: Employee) => {
     const employee = await prisma.employee.create({

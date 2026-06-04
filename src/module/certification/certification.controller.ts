@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { certificationService } from "./certification.service";
+import { certificationService } from "./certification.service.js";
 
 const createCertification = async (req: Request, res: Response) => {
   try {

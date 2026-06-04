@@ -1,7 +1,7 @@
 // backend project.routes.ts
 import { Router } from "express";
-import { projectController } from "./project.controller";
-import { requireAdminAuth } from "../../middleware/requireAdminAuth";
+import { projectController } from "./project.controller.js";
+import { requireAdminAuth } from "../../middleware/requireAdminAuth.js";
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 // backend project.controller.ts
 import { Request, Response } from "express";
-import { projectService } from "./project.service";
+import { projectService } from "./project.service.js";
 
 const createProject = async (req: Request, res: Response) => {
   try {

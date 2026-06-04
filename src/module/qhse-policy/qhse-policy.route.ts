@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { qhsePolicyController } from "./qhse-policy.controller";
-import { requireAdminAuth } from "../../middleware/requireAdminAuth";
+import { qhsePolicyController } from "./qhse-policy.controller.js";
+import { requireAdminAuth } from "../../middleware/requireAdminAuth.js";
 
 const router = Router();
 
