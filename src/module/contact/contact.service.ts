@@ -48,8 +48,21 @@ const validateContactPayload = (payload: ContactPayload) => {
 };
 
 const sendContactMessage = async (payload: ContactPayload) => {
-  assertEmailConfig();
   const contact = validateContactPayload(payload);
+
+  if (process.env.CONTACT_EMAIL_ENABLED !== "true") {
+    console.info("Contact email disabled. Message was not sent.", {
+      name: contact.name,
+      email: contact.email,
+      subject: contact.subject,
+    });
+
+    return {
+      message: "Message received. Email delivery is currently disabled.",
+    };
+  }
+
+  assertEmailConfig();
 
   const port = Number(process.env.SMTP_PORT);
   const transporter = nodemailer.createTransport({
