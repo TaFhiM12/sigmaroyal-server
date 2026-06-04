@@ -1,0 +1,16 @@
+model QhsePolicy {
+  id                String   @id @default(cuid())
+  key               String   @unique @default("main")
+  pageTitle         String   @default("QHSE POLICY")
+  breadcrumbLabel   String   @default("QHSE POLICY")
+  sectionTitle      String   @default("QHSE POLICY")
+  heroImageUrl      String
+  policyStatement   String
+  bulletPoints      String[]
+  analysisStatement String
+  goldenRulesTitle  String   @default("12 Golden Safety Rules")
+  goldenRules       String[]
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
