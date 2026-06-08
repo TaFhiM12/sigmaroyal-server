@@ -6,6 +6,15 @@ type CreateProjectPayload = Omit<Project, "id" | "createdAt" | "updatedAt"> & {
   images?: Array<{ url: string; caption?: string }>;
 };
 
+const normalizeProjectStatus = (status?: string) => {
+  if (!status) return undefined;
+
+  const normalizedStatus = status.toUpperCase();
+  return Object.values(ProjectStatus).includes(normalizedStatus as ProjectStatus)
+    ? normalizedStatus as ProjectStatus
+    : undefined;
+};
+
 const createProject = async (payload: CreateProjectPayload) => {
   const {
     title,
@@ -37,7 +46,7 @@ const createProject = async (payload: CreateProjectPayload) => {
       year,
       scopeOfWork,
       description,
-      status,
+      status: normalizeProjectStatus(status) || ProjectStatus.COMPLETED,
       featured,
       ...(images && images.length > 0 && {
         images: {
@@ -89,7 +98,10 @@ const updateProject = async (id: string, payload: any) => {
   if (year !== undefined) updateData.year = year;
   if (scopeOfWork !== undefined) updateData.scopeOfWork = scopeOfWork;
   if (description !== undefined) updateData.description = description;
-  if (status !== undefined) updateData.status = status;
+  if (status !== undefined) {
+    const normalizedStatus = normalizeProjectStatus(status);
+    if (normalizedStatus) updateData.status = normalizedStatus;
+  }
   if (featured !== undefined) updateData.featured = featured;
 
   await prisma.project.update({
@@ -171,8 +183,9 @@ const getProjects = async (query: ProjectQuery) => {
     where.sector = sector as Sector;
   }
 
-  if (status && Object.values(ProjectStatus).includes(status as ProjectStatus)) {
-    where.status = status as ProjectStatus;
+  const normalizedStatus = normalizeProjectStatus(status);
+  if (normalizedStatus) {
+    where.status = normalizedStatus;
   }
 
   if (featured !== undefined) {
