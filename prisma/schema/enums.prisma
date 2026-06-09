@@ -13,4 +13,5 @@ enum Sector {
 enum ProjectStatus {
   COMPLETED
   ONGOING
+  UPCOMING
 }

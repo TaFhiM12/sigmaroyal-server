@@ -237,7 +237,7 @@ const getProjects = async (query: ProjectQuery) => {
     prisma.project.count({ where }),
   ]);
 
-  const [completedCount, ongoingCount, sectorCounts] =
+  const [completedCount, ongoingCount, upcomingCount, sectorCounts] =
     await Promise.all([
       prisma.project.count({
         where: { status: "COMPLETED" },
@@ -245,6 +245,10 @@ const getProjects = async (query: ProjectQuery) => {
 
       prisma.project.count({
         where: { status: "ONGOING" },
+      }),
+
+      prisma.project.count({
+        where: { status: "UPCOMING" },
       }),
 
       prisma.project.groupBy({
@@ -265,6 +269,7 @@ const getProjects = async (query: ProjectQuery) => {
     counts: {
       completed: completedCount,
       ongoing: ongoingCount,
+      upcoming: upcomingCount,
       bySector: sectorCounts,
     },
     data: projects,

@@ -1,0 +1,19 @@
+model PageContent {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  label          String
+  path           String?
+  heroTitle      String?
+  heroSubtitle   String?
+  heroImageUrl   String?
+  introTitle     String?
+  introBody      String?
+  sections       Json     @default("[]")
+  seoTitle       String?
+  seoDescription String?
+  isPublished    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("page_contents")
+}
