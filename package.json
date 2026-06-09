@@ -8,6 +8,7 @@
     "build": "prisma generate && tsc --noEmit",
     "vercel-build": "prisma generate && prisma migrate deploy && tsc --noEmit",
     "start": "tsx src/server.ts",
+    "seed:team": "tsx prisma/seed-team.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:studio": "prisma studio"

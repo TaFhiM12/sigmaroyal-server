@@ -3,10 +3,8 @@ import { EmployeeController } from "./employee.controller.js";
 import { requireAdminAuth } from "../../middleware/requireAdminAuth.js";
 
 const router = Router();
-
-
-
 router.post("/", requireAdminAuth, EmployeeController.createEmployee);
+router.post("/reorder", requireAdminAuth, EmployeeController.reorderEmployees);
 router.get("/:id", EmployeeController.getEmployeeById);
 router.get("/", EmployeeController.getAllEmployees);
 router.put("/:id", requireAdminAuth, EmployeeController.updateEmployee);

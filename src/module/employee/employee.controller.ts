@@ -2,12 +2,8 @@ import { Request, Response } from "express"
 import { EmployeeService } from "./employee.service.js";
 
 const createEmployee = async(req: Request, res: Response) => {
-    // Implementation for creating an employee
     try {
         const employeeData = req.body;
-        // Validate employeeData here if necessary
-
-        // Call the service to create the employee
         const newEmployee = await EmployeeService.createEmployee(employeeData);
         res.status(201).json({
             success: true,
@@ -15,7 +11,10 @@ const createEmployee = async(req: Request, res: Response) => {
             message: "Employee created successfully"
         });
     } catch (error) {
-        res.status(500).json({ error: "Failed to create employee" });
+        res.status(400).json({
+            success: false,
+            message: error instanceof Error ? error.message : "Failed to create employee"
+        });
     }
 }
 
@@ -38,7 +37,12 @@ const getEmployeeById = async(req: Request, res: Response) => {
 
 const getAllEmployees = async(req: Request, res: Response) => {
     try {
-        const employees = await EmployeeService.getAllEmployees();
+        const department = typeof req.query.department === "string" ? req.query.department : undefined;
+        const includeInactive = req.query.includeInactive === "true";
+        const employees = await EmployeeService.getAllEmployees({
+            ...(department ? { department } : {}),
+            includeInactive,
+        });
         res.status(200).json({
             success: true,
             data: employees,
@@ -63,7 +67,32 @@ const updateEmployee = async(req: Request, res: Response) => {
             message: "Employee updated successfully"
         });
     } catch (error) {
-        res.status(500).json({ error: "Failed to update employee" });
+        res.status(400).json({
+            success: false,
+            message: error instanceof Error ? error.message : "Failed to update employee"
+        });
+    }
+}
+
+const reorderEmployees = async(req: Request, res: Response) => {
+    try {
+        const { ids } = req.body;
+
+        if (!Array.isArray(ids) || ids.some((id) => typeof id !== "string")) {
+            return res.status(400).json({
+                success: false,
+                message: "Employee ids are required",
+            });
+        }
+
+        const result = await EmployeeService.reorderEmployees(ids);
+        res.status(200).json({
+            success: true,
+            data: result,
+            message: "Employee order updated successfully"
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to reorder employees" });
     }
 }
 
@@ -89,5 +118,6 @@ export const EmployeeController = {
     getEmployeeById,
     getAllEmployees,
     updateEmployee,
+    reorderEmployees,
     deleteEmployee,
 }
