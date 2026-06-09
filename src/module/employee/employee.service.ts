@@ -21,6 +21,23 @@ type EmployeeQuery = {
 };
 
 const DEFAULT_PHOTO_URL = "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop";
+const DEPARTMENT_ORDER = [
+    "Core Management",
+    "HR & ADMIN",
+    "Accounts & Finance",
+    "All Engineers",
+    "All Officers",
+    "All Member",
+];
+
+const getDepartmentRank = (department: string) => {
+    const normalizedDepartment = department.trim().toLowerCase();
+    const index = DEPARTMENT_ORDER.findIndex(
+        (item) => item.toLowerCase() === normalizedDepartment
+    );
+
+    return index === -1 ? DEPARTMENT_ORDER.length : index;
+};
 
 const normalizeEmployeeData = (employeeData: EmployeePayload) => {
     const name = employeeData.name?.trim();
@@ -77,12 +94,20 @@ const getAllEmployees = async (query: EmployeeQuery = {}) => {
     const employees = await prisma.employee.findMany({
         where,
         orderBy: [
-            { department: "asc" },
             { orderIndex: "asc" },
             { name: "asc" },
         ],
     });
-    return employees;
+
+    return employees.sort((first, second) => {
+        const departmentSort = getDepartmentRank(first.department) - getDepartmentRank(second.department);
+        if (departmentSort !== 0) return departmentSort;
+
+        const orderSort = (first.orderIndex ?? 0) - (second.orderIndex ?? 0);
+        if (orderSort !== 0) return orderSort;
+
+        return first.name.localeCompare(second.name);
+    });
 }
 
 const updateEmployee = async (id: string, employeeData: EmployeePayload) => {
