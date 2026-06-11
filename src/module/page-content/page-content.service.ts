@@ -77,19 +77,18 @@ const upsertPageContent = async (slug: string, payload: PageContentPayload) => {
 };
 
 const seedDefaultPageContents = async () => {
-  const results = [];
-
-  for (const item of defaultPageContents) {
-    const result = await prisma.pageContent.upsert({
+  const results = await prisma.$transaction(
+    defaultPageContents.map((item) =>
+      prisma.pageContent.upsert({
         where: { slug: item.slug },
         create: { ...item, sections: [] },
         update: {
           label: item.label,
           path: item.path,
         },
-      });
-    results.push(result);
-  }
+      }),
+    ),
+  );
 
   return {
     inserted: results.length,
