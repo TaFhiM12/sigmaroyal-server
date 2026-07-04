@@ -9,6 +9,7 @@ import { hytorcRoutes } from './module/hytorc/hytorc.route.js';
 import { qhsePolicyRoutes } from './module/qhse-policy/qhse-policy.route.js';
 import { contactRoutes } from './module/contact/contact.route.js';
 import { pageContentRoutes } from './module/page-content/page-content.route.js';
+import { statisticsRoutes } from './module/statistics/statistics.route.js';
 
 const app: Application = express();
 
@@ -43,6 +44,7 @@ app.use('/api/v1/hytorc', hytorcRoutes);
 app.use('/api/v1/qhse-policy', qhsePolicyRoutes);
 app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/page-content', pageContentRoutes);
+app.use('/api/v1/stats', statisticsRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
