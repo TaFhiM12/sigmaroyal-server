@@ -1,5 +1,9 @@
 node_modules
 .env.*
+.DS_Store
+tmp/
+tmp_*
+tmp-*
 dist
 !.env.example
 
