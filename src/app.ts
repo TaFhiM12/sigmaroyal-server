@@ -19,7 +19,7 @@ const configuredOrigins = process.env.CORS_ORIGINS?.split(",")
 
 const allowedOrigins = configuredOrigins?.length
   ? configuredOrigins
-  : ['https://sigmaroyal-client.vercel.app', 'http://localhost:3000'];
+  : ['https://sigmaroyal.vercel.app', 'http://localhost:3000'];
 
 app.use(cors({
   origin(origin, callback) {
