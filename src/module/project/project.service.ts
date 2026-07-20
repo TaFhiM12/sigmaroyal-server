@@ -169,7 +169,7 @@ const getProjects = async (query: ProjectQuery) => {
     year,
     client,
     search,
-    sortBy = "createdAt",
+    sortBy = "updatedAt",
     sortOrder = "desc",
   } = query;
 
@@ -213,6 +213,7 @@ const getProjects = async (query: ProjectQuery) => {
 
   const validSortFields = [
     "createdAt",
+    "updatedAt",
     "year",
     "title",
     "client",
@@ -223,7 +224,7 @@ const getProjects = async (query: ProjectQuery) => {
       ? {
           [sortBy]: sortOrder === "asc" ? "asc" : "desc",
         }
-      : { createdAt: "desc" };
+      : { updatedAt: "desc" };
 
   const [projects, total] = await Promise.all([
     prisma.project.findMany({

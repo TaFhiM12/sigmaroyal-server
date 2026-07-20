@@ -4,6 +4,17 @@ import { clientService } from "./client.service.js";
 
 const createClient = async (req: Request, res: Response) => {
   try {
+    const name = typeof req.body.name === "string" ? req.body.name.trim() : "";
+    const logoUrl = typeof req.body.logoUrl === "string" ? req.body.logoUrl.trim() : "";
+    if (!name || !logoUrl) {
+      return res.status(400).json({
+        success: false,
+        message: "Client name and logo are required",
+      });
+    }
+    req.body.name = name;
+    req.body.logoUrl = logoUrl;
+
     const result = await clientService.createClient(req.body);
 
     res.status(201).json({
