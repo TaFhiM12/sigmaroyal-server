@@ -10,6 +10,7 @@ import { qhsePolicyRoutes } from './module/qhse-policy/qhse-policy.route.js';
 import { contactRoutes } from './module/contact/contact.route.js';
 import { pageContentRoutes } from './module/page-content/page-content.route.js';
 import { statisticsRoutes } from './module/statistics/statistics.route.js';
+import { showcaseRoutes } from './module/showcase/showcase.route.js';
 
 const app: Application = express();
 
@@ -45,6 +46,7 @@ app.use('/api/v1/qhse-policy', qhsePolicyRoutes);
 app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/page-content', pageContentRoutes);
 app.use('/api/v1/stats', statisticsRoutes);
+app.use('/api/v1/showcase', showcaseRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
